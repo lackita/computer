@@ -1,0 +1,16 @@
+@code_type clisp .cl
+@comment_type ;
+
+@title Hello World in Common Lisp
+
+@s One Line
+
+I'd like to start by writing in Common Lisp. Ultimately, I'd like to
+write my own language and literate programmming system, but I have to
+bootstrap from somewhere.
+
+--- hello.cl
+(print "hello")
+---
+
+That's it for the program, let's see if it works.
