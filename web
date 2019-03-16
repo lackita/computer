@@ -50,6 +50,17 @@
 ;; while weaving parses the file as markdown and generates an html
 ;; file.
 ;;
+;; Extracting the command is as simple as checking the beginning of
+;; `*args*`. I went ahead and introduced error handling here, although
+;; the single command the script accepts at this point makes the other
+;; half of that condition rather pointless. Eventually the function
+;; for the tangle logic will be called from within this `cond`, but
+;; not worrying about that until I can interleave code.
+
+(setq command (car *args*))
+(cond ((string= command "tangle") '(tangle logic))
+      (t (error (concatenate 'string "invalid command: " command))))
+
 ;; Tangle
 ;; ------
 ;; For now, I'm leaving the `tangle` command as implicit, this is to

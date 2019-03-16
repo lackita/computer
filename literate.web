@@ -29,7 +29,6 @@
 ;; commentary using features as I write them. Here's what I still have
 ;; left to implement:
 ;;
-;; * Add the tangle command
 ;; * Exclude anything outside of a ```...``` block
 ;; * Allow function name substitution
 ;; * Add the weave command
@@ -42,6 +41,17 @@
 ;; the new version can be built without needing to step through all
 ;; versions of the code.
 ;;
+;; I'm eventually planning on building my own version of lisp. As a
+;; result, I'm tolerating several compromises that will eventually
+;; need to be corrected. Documenting them here as a reminder for when
+;; that is completed.
+;;
+;; * An invalid version of `web` can be created, which could present
+;;   an intractible situation.
+;; * Because `web` is writing to itself while open, clisp prints a
+;;   warning.
+;; * Calling `chmod` instead of manipulating the permission directly.
+;;
 ;; Commands
 ;; ========
 ;; There will be two commands for this script: `tangle` and
@@ -49,6 +59,17 @@
 ;; while weaving parses the file as markdown and generates an html
 ;; file.
 ;;
+;; Extracting the command is as simple as checking the beginning of
+;; `*args*`. I went ahead and introduced error handling here, although
+;; the single command the script accepts at this point makes the other
+;; half of that condition rather pointless. Eventually the function
+;; for the tangle logic will be called from within this `cond`, but
+;; not worrying about that until I can interleave code.
+
+(setq command (car *args*))
+(cond ((string= command "tangle") '(tangle logic))
+      (t (error (concatenate 'string "invalid command: " command))))
+
 ;; Tangle
 ;; ------
 ;; For now, I'm leaving the `tangle` command as implicit, this is to
