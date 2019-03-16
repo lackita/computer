@@ -30,7 +30,6 @@
 ;; commentary using features as I write them. Here's what I still have
 ;; left to implement:
 ;;
-;; * Make generated file executable
 ;; * Add the tangle command
 ;; * Exclude anything outside of a ```...``` block
 ;; * Allow function name substitution
@@ -64,4 +63,8 @@
   (loop for line = (read-line in nil)
 	while line do (write-line line out))
   (close in))
+
+;; The file needs to be executable. Shelling out leaves a bad taste in
+;; my mouth I'll eventually need to fix, but for now I'll tolerate it.
+
 (shell "chmod a+x web")
