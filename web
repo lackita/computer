@@ -1,0 +1,67 @@
+#!/usr/bin/clisp
+;; Literate Programming
+;; ====================
+;; I just finished reading Donald Knuth's articles on Literate
+;; Programming (TODO: Add Reference), and found the idea quite
+;; inspiring. While I find the core idea sound, I have some issues
+;; with the tools available.
+;;
+;; * The base language is Pascal (TODO: Add Reference) (and later C
+;;   (TODO: Add Reference)), but I generally would prefer to work in a
+;;   variant of Lisp.
+;; * The documentation language is TeX (TODO: Add Reference), which I
+;;   find less intuitive to write in than Markdown.
+;; * The constructs that exist in existing tools remain rooted in
+;;   procedural programming, while my style is decidedly more
+;;   functional.
+;;
+;; One thing a reader may notice is that I'm using names already
+;; claimed by existing tools. I spent some time trying to think of new
+;; names, but they were all stupid or were already used. Instead of
+;; spinning my wheels on that, I decided to just reuse the existing
+;; name. This could be considered a problem if I this were intended
+;; for a broad audience, but I'm making this just for me (TODO: Insert
+;; link).
+;;
+;; Roadmap
+;; =======
+;; The technique I'm using to bootstrap this project is to start by
+;; narrating the code entirely in comments. I will then mutate the
+;; commentary using features as I write them. Here's what I still have
+;; left to implement:
+;;
+;; * Make generated file executable
+;; * Add the tangle command
+;; * Exclude anything outside of a ```...``` block
+;; * Allow function name substitution
+;; * Add the weave command
+;; * Write the markdown generator
+;; * Accept file name as script argument
+;;
+;; Each version of the script will be used to generate the subsequent
+;; version. Unlike the other files in this project, though, the
+;; generated code file will be committed to the repository. That way,
+;; the new version can be built without needing to step through all
+;; versions of the code.
+;;
+;; Commands
+;; ========
+;; There will be two commands for this script: `tangle` and
+;; `weave`. Tangling interleaves the code in an executable order,
+;; while weaving parses the file as markdown and generates an html
+;; file.
+;;
+;; Tangle
+;; ------
+;; For now, I'm leaving the `tangle` command as implicit, this is to
+;; keep the program simple and focus it on a single feature. All we're
+;; doing in this early version of the code is reading the entire file
+;; and writing it to a new file called `web`.
+
+(let ((in (open "literate.web"))
+      (out (open "web" :direction :output :if-exists :supersede)))
+  (write-line "#!/usr/bin/clisp" out)
+  (loop for line = (read-line in nil)
+	while line do (write-line line out))
+  (close in))
+(shell "chmod a+x web")
